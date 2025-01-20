@@ -1,0 +1,13 @@
+basic:
+  save-dir: out
+  name: cbit-paas-gateway
+  version: 1.2.3
+  dockerfile: Dockerfile
+  auto-save-file: true
+  auto-delete-image: true
+
+copy-file:
+  - config.docker.yaml => config.yaml
+
+copy-dir:
+  - resource

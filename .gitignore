@@ -1,0 +1,6 @@
+.vscode
+.idea
+./out
+*.exe
+__debug*
+*.DS_Store

@@ -120,8 +120,15 @@ func buildImage(config Config) {
 		output []byte
 	)
 	str.NewTerminalLog(title, "%s").Info("开始")
-	log.Printf("docker build -f %s -t %s:%s %s", src.Copy().Join(config.Basic.Dockerfile).GetDir(), config.Basic.Name, config.Basic.Version, src.GetDir())
-	cmd = exec.Command("docker", "build", "-f", src.Copy().Join(config.Basic.Dockerfile).GetDir(), "-t", config.Basic.Name+":"+config.Basic.Version, src.GetDir())
+	cmd = exec.Command(
+		"docker",
+		"build",
+		"-f",
+		src.Copy().Join(config.Basic.Dockerfile).GetDir(),
+		"-t",
+		config.Basic.Name+":"+config.Basic.Version,
+		src.GetDir(),
+	)
 	output, err = cmd.Output()
 	if err != nil {
 		str.NewTerminalLog(title, "错误：%s -> %v").Error(output, err)
@@ -138,7 +145,13 @@ func saveImage(config Config) {
 		src   = filesystem.FileSystemApp.NewByRelative(config.Basic.SaveDir).Join(config.Basic.Version)
 	)
 	str.NewTerminalLog(title, "%s").Info("开始")
-	cmd = exec.Command("docker", "save", "-o", src.Join(config.Basic.Name+"_"+config.Basic.Version+".tar").GetDir(), config.Basic.Name+":"+config.Basic.Version)
+	cmd = exec.Command(
+		"docker",
+		"save",
+		"-o",
+		src.Join(config.Basic.Name+"_"+config.Basic.Version+".tar").GetDir(),
+		config.Basic.Name+":"+config.Basic.Version,
+	)
 	_, err = cmd.Output()
 	if err != nil {
 		str.NewTerminalLog("保存docker镜像错误：%v").Error(err)

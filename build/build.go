@@ -138,7 +138,13 @@ func saveImage(config Config) {
 		src   = filesystem.FileSystemApp.NewByRelative(config.Basic.SaveDir).Join(config.Basic.Version)
 	)
 	str.NewTerminalLog(title, "%s").Info("开始")
-	cmd = exec.Command("docker", "save", "-o", src.Join(config.Basic.Name+"_"+config.Basic.Version+".tar").GetDir(), config.Basic.Name+":"+config.Basic.Version)
+	cmd = exec.Command(
+		"docker",
+		"save",
+		"-o",
+		src.Join(config.Basic.Name+"_"+config.Basic.Version+".tar").GetDir(),
+		config.Basic.Name+":"+config.Basic.Version,
+	)
 	_, err = cmd.Output()
 	if err != nil {
 		str.NewTerminalLog("保存docker镜像错误：%v").Error(err)

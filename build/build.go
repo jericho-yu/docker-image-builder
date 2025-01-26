@@ -120,8 +120,15 @@ func buildImage(config Config) {
 		output []byte
 	)
 	str.NewTerminalLog(title, "%s").Info("开始")
-	log.Printf("docker build -f %s -t %s:%s %s", src.Copy().Join(config.Basic.Dockerfile).GetDir(), config.Basic.Name, config.Basic.Version, src.GetDir())
-	cmd = exec.Command("docker", "build", "-f", src.Copy().Join(config.Basic.Dockerfile).GetDir(), "-t", config.Basic.Name+":"+config.Basic.Version, src.GetDir())
+	cmd = exec.Command(
+		"docker",
+		"build",
+		"-f",
+		src.Copy().Join(config.Basic.Dockerfile).GetDir(),
+		"-t",
+		config.Basic.Name+":"+config.Basic.Version,
+		src.GetDir(),
+	)
 	output, err = cmd.Output()
 	if err != nil {
 		str.NewTerminalLog(title, "错误：%s -> %v").Error(output, err)

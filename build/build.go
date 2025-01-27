@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"os/exec"
 	"strings"
@@ -38,7 +37,6 @@ func buildGo(config Config) {
 		saveDir = filesystem.FileSystemApp.NewByRelative(config.Basic.SaveDir).Join(config.Basic.Version)
 		cmd     *exec.Cmd
 		appName string
-		output  []byte
 		os      = os.Getenv("GOOS")
 	)
 	str.NewTerminalLog(title, "：%s").Info("开始")
@@ -53,12 +51,11 @@ func buildGo(config Config) {
 	cmd = exec.Command("go", "build", "-o", appName, ".")
 
 	// 获取命令的输出
-	output, err = cmd.Output()
+	_, err = cmd.Output()
 	if err != nil {
 		str.NewTerminalLog(title, "错误：%v").Error(err)
 	}
 
-	log.Printf("OK: %s", output)
 	str.NewTerminalLog(title, "成功").Success()
 }
 
@@ -126,7 +123,7 @@ func buildImage(config Config) {
 		"-f",
 		src.Copy().Join(config.Basic.Dockerfile).GetDir(),
 		"-t",
-		config.Basic.Name+":"+config.Basic.Version,
+		fmt.Sprintf("%s:%s", config.Basic.Name, config.Basic.Version),
 		src.GetDir(),
 	)
 	output, err = cmd.Output()
@@ -150,7 +147,7 @@ func saveImage(config Config) {
 		"save",
 		"-o",
 		src.Join(fmt.Sprintf("%s_%s.tar", config.Basic.Name, config.Basic.Version)).GetDir(),
-		config.Basic.Name+":"+config.Basic.Version,
+		fmt.Sprintf("%s:%s", config.Basic.Name, config.Basic.Version),
 	)
 	_, err = cmd.Output()
 	if err != nil {

@@ -149,7 +149,7 @@ func saveImage(config Config) {
 		"docker",
 		"save",
 		"-o",
-		src.Join(config.Basic.Name+"_"+config.Basic.Version+".tar").GetDir(),
+		src.Join(fmt.Sprintf("%s_%s.tar", config.Basic.Name, config.Basic.Version)).GetDir(),
 		config.Basic.Name+":"+config.Basic.Version,
 	)
 	_, err = cmd.Output()
@@ -167,7 +167,7 @@ func deleteImage(config Config) {
 		cmd   *exec.Cmd
 	)
 	str.NewTerminalLog(title, "%s").Info("开始")
-	cmd = exec.Command("docker", "rmi", config.Basic.Name+":"+config.Basic.Version)
+	cmd = exec.Command("docker", "rmi", fmt.Sprintf("%s:%s", config.Basic.Name, config.Basic.Version))
 	_, err = cmd.Output()
 	if err != nil {
 		str.NewTerminalLog(title, "错误：%v").Error(err)
